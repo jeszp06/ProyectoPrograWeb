@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProyectoPrograWeb</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Navegación -->
+    <nav>
+        <h2>ProyectoPrograWeb</h2>
+        <ul>
+            <li><button onclick="mostrarSeccion('dashboard')">Dashboard</button></li>
+            <li><button onclick="mostrarSeccion('personal')">Personal</button></li>
+            <li><button onclick="mostrarSeccion('materiales')">Materiales / Gastos</button></li>
+            <li><button onclick="mostrarSeccion('tareas')">Tareas</button></li>
+        </ul>
+    </nav>
+
+    <!-- Contenedor Principal -->
+    <main>
+        
+        <!-- Dashboard (ACTUALIZADO) -->
+        <section id="dashboard" class="seccion activa">
+            <h1>Dashboard del Proyecto</h1>
+            
+            <!-- Barra de Avance -->
+            <div class="card">
+                <h3>Avance del Proyecto</h3>
+                <div class="barra-fondo">
+                    <div id="barraProgreso" class="barra-relleno">0%</div>
+                </div>
+            </div>
+
+            <!-- Alertas de Personal -->
+            <div id="contenedorAlertas" class="alertas-contenedor">
+                <!-- Las alertas de más de 8h se pintarán aquí -->
+            </div>
+
+            <!-- Tarjetas de Costos -->
+            <div class="dashboard-grid">
+                <!-- Total -->
+                <div class="stat-card stat-total">
+                    <h3>Costo Total del Proyecto</h3>
+                    <p><strong>Estimado:</strong> $<span id="dashTotalEst">0.00</span></p>
+                    <p><strong>Real:</strong> $<span id="dashTotalReal">0.00</span></p>
+                </div>
+                <!-- Personal -->
+                <div class="stat-card">
+                    <h3>Costo Personal</h3>
+                    <p><strong>Estimado:</strong> $<span id="dashPersEst">0.00</span></p>
+                    <p><strong>Real:</strong> $<span id="dashPersReal">0.00</span></p>
+                </div>
+                <!-- Materiales -->
+                <div class="stat-card">
+                    <h3>Costo Materiales</h3>
+                    <p><strong>Estimado:</strong> $<span id="dashMatEst">0.00</span></p>
+                    <p><strong>Real:</strong> $<span id="dashMatReal">0.00</span></p>
+                </div>
+                <!-- Otros Costos -->
+                <div class="stat-card">
+                    <h3>Otros Gastos</h3>
+                    <p><strong>Estimado:</strong> $<span id="dashOtrosEst">0.00</span></p>
+                    <p><strong>Real:</strong> $<span id="dashOtrosReal">0.00</span></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Personal -->
+        <section id="personal" class="seccion">
+            <h1>Gestión de Personal</h1>
+            <div class="card">
+                <h3>Agregar Nuevo Empleado</h3>
+                <form id="formPersonal" onsubmit="agregarPersonal(event)">
+                    <input type="text" id="nombrePersonal" placeholder="Nombre del empleado" required>
+                    <input type="number" id="costoHoraPersonal" placeholder="Costo por hora ($)" step="0.01" min="0" required>
+                    <button type="submit" class="btn-agregar">Guardar</button>
+                </form>
+            </div>
+            <div class="card">
+                <h3>Lista de Personal</h3>
+                <table>
+                    <thead><tr><th>Nombre</th><th>Costo / Hora</th><th>Acciones</th></tr></thead>
+                    <tbody id="bodyPersonal"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Materiales y Otros Costos -->
+        <section id="materiales" class="seccion">
+            <h1>Materiales y Otros Costos</h1>
+            <div class="card">
+                <h3>Agregar Material</h3>
+                <form onsubmit="agregarMaterial(event)">
+                    <input type="text" id="nombreMaterial" placeholder="Nombre del material" required>
+                    <input type="number" id="costoUnidadMaterial" placeholder="Costo por unidad ($)" step="0.01" min="0" required>
+                    <button type="submit" class="btn-agregar">Guardar Material</button>
+                </form>
+                <table>
+                    <thead><tr><th>Material</th><th>Costo / Unidad</th><th>Acciones</th></tr></thead>
+                    <tbody id="bodyMateriales"></tbody>
+                </table>
+            </div>
+            <div class="card">
+                <h3>Agregar Otro Costo</h3>
+                <form onsubmit="agregarOtroCosto(event)">
+                    <input type="text" id="conceptoOtroCosto" placeholder="Concepto del gasto" required>
+                    <input type="number" id="costoUnidadOtroCosto" placeholder="Costo total ($)" step="0.01" min="0" required>
+                    <button type="submit" class="btn-agregar">Guardar Gasto</button>
+                </form>
+                <table>
+                    <thead><tr><th>Concepto</th><th>Costo</th><th>Acciones</th></tr></thead>
+                    <tbody id="bodyOtrosCostos"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Tareas -->
+        <section id="tareas" class="seccion">
+            <h1>Gestión de Tareas</h1>
+            <div class="card">
+                <h3>Crear Nueva Tarea</h3>
+                <form onsubmit="agregarTarea(event)">
+                    <input type="text" id="nombreTarea" placeholder="Nombre de la tarea" required>
+                    <input type="date" id="fechaInicioTarea" required title="Fecha de inicio">
+                    <input type="date" id="fechaFinTarea" required title="Fecha de fin">
+                    <button type="submit" class="btn-agregar">Crear Tarea</button>
+                </form>
+            </div>
+            <div class="card">
+                <h3>Lista de Tareas</h3>
+                <table>
+                    <thead><tr><th>Tarea</th><th>Fechas</th><th>Estado</th><th>Acciones</th></tr></thead>
+                    <tbody id="bodyTareas"></tbody>
+                </table>
+            </div>
+            <div class="card" id="panelAsignacion" style="display: none;">
+                <h3 id="tituloAsignacion">Asignar Recursos a: </h3>
+                <input type="hidden" id="idTareaActual">
+                <div class="grid-asignacion">
+                    <div class="col-asignacion">
+                        <h4>Personal</h4>
+                        <form onsubmit="asignarPersonalTarea(event)">
+                            <select id="selectPersonal" required></select>
+                            <input type="number" id="horasPersonal" placeholder="Horas totales en la tarea" min="1" step="0.5" required>
+                            <button type="submit" class="btn-agregar">Asignar</button>
+                        </form>
+                        <ul id="listaPersonalTarea"></ul>
+                    </div>
+                    <div class="col-asignacion">
+                        <h4>Materiales</h4>
+                        <form onsubmit="asignarMaterialTarea(event)">
+                            <select id="selectMaterial" required></select>
+                            <input type="number" id="cantidadMaterial" placeholder="Cantidad" min="1" step="0.01" required>
+                            <button type="submit" class="btn-agregar">Asignar</button>
+                        </form>
+                        <ul id="listaMaterialTarea"></ul>
+                    </div>
+                    <div class="col-asignacion">
+                        <h4>Otros Costos</h4>
+                        <form onsubmit="asignarOtroCostoTarea(event)">
+                            <select id="selectOtroCosto" required></select>
+                            <input type="number" id="cantidadOtroCosto" placeholder="Cantidad" min="1" step="0.01" required>
+                            <button type="submit" class="btn-agregar">Asignar</button>
+                        </form>
+                        <ul id="listaOtroCostoTarea"></ul>
+                    </div>
+                </div>
+                <button class="btn-eliminar" onclick="cerrarAsignacion()" style="margin-top: 15px;">Cerrar Panel</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
