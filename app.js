@@ -36,7 +36,6 @@ function mostrarSeccion(idSeccion) {
     if(idSeccion === 'dashboard') actualizarDashboard(); 
 }
 
-// CRUD
 function agregarPersonal(e) { e.preventDefault(); personal.push({ id: Date.now(), nombre: document.getElementById('nombrePersonal').value, costoHora: parseFloat(document.getElementById('costoHoraPersonal').value) }); guardarDatos(); document.getElementById('formPersonal').reset(); renderizarPersonal(); }
 function eliminarPersonal(id) { if (tareas.some(t => t.personal && t.personal.some(x => x.id === id))) return alert('No se puede eliminar: El empleado está asignado a una tarea.'); personal = personal.filter(p => p.id !== id); guardarDatos(); renderizarPersonal(); }
 function renderizarPersonal() { document.getElementById('bodyPersonal').innerHTML = personal.map(p => `<tr><td>${p.nombre}</td><td>$${p.costoHora.toFixed(2)}</td><td><button class="btn-eliminar" onclick="eliminarPersonal(${p.id})"><i class='bx bx-trash'></i> Eliminar</button></td></tr>`).join(''); }
@@ -49,7 +48,6 @@ function agregarOtroCosto(e) { e.preventDefault(); otrosCostos.push({ id: Date.n
 function eliminarOtroCosto(id) { if (tareas.some(t => t.otrosCostos && t.otrosCostos.some(x => x.id === id))) return alert('No se puede eliminar: El gasto está en uso.'); otrosCostos = otrosCostos.filter(c => c.id !== id); guardarDatos(); renderizarOtrosCostos(); }
 function renderizarOtrosCostos() { document.getElementById('bodyOtrosCostos').innerHTML = otrosCostos.map(c => `<tr><td>${c.concepto}</td><td>$${c.costoUnidad.toFixed(2)}</td><td><button class="btn-eliminar" onclick="eliminarOtroCosto(${c.id})"><i class='bx bx-trash'></i> Eliminar</button></td></tr>`).join(''); }
 
-// TAREAS
 function agregarTarea(e) {
     e.preventDefault();
     const fI = document.getElementById('fechaInicioTarea').value; const fF = document.getElementById('fechaFinTarea').value;
@@ -76,17 +74,14 @@ function renderizarTareas() {
     `).join(''); 
 }
 
-// FUNCIONES DEL MODAL "OBSERVAR TAREA"
 function observarTarea(id) {
     const t = tareas.find(x => x.id === id);
     if (!t) return;
 
-    // Título del Modal
     document.getElementById('modalTituloTarea').innerHTML = `<i class='bx bx-search-alt-2'></i> Detalles: ${t.nombre}`;
     
     let htmlDetalles = `<div class="detalle-grid">`;
     
-    // 1. Calcular y mostrar Personal
     let costoTotalPers = 0;
     htmlDetalles += `<div class="detalle-col"><h4><i class='bx bx-user'></i> Personal Asignado</h4><ul>`;
     if(t.personal.length === 0) htmlDetalles += `<li><i>Sin asignar</i></li>`;
@@ -100,7 +95,6 @@ function observarTarea(id) {
     });
     htmlDetalles += `</ul><p class="subtotal">Subtotal: $${costoTotalPers.toFixed(2)}</p></div>`;
 
-    // 2. Calcular y mostrar Materiales
     let costoTotalMat = 0;
     htmlDetalles += `<div class="detalle-col"><h4><i class='bx bx-cube'></i> Materiales</h4><ul>`;
     if(t.materiales.length === 0) htmlDetalles += `<li><i>Sin asignar</i></li>`;
@@ -114,7 +108,6 @@ function observarTarea(id) {
     });
     htmlDetalles += `</ul><p class="subtotal">Subtotal: $${costoTotalMat.toFixed(2)}</p></div>`;
 
-    // 3. Calcular y mostrar Otros Costos
     let costoTotalOtr = 0;
     htmlDetalles += `<div class="detalle-col"><h4><i class='bx bx-receipt'></i> Otros Gastos</h4><ul>`;
     if(t.otrosCostos.length === 0) htmlDetalles += `<li><i>Sin asignar</i></li>`;
@@ -130,11 +123,10 @@ function observarTarea(id) {
     
     htmlDetalles += `</div>`;
     
-    // Gran Total
     let granTotal = costoTotalPers + costoTotalMat + costoTotalOtr;
     htmlDetalles += `<div class="detalle-total"><h3>Costo Total Invertido: $${granTotal.toFixed(2)}</h3></div>`;
 
-    // Inyectar en el HTML y mostrar
+
     document.getElementById('modalContenidoTarea').innerHTML = htmlDetalles;
     document.getElementById('modalObservar').style.display = 'flex';
 }
@@ -143,7 +135,7 @@ function cerrarModalObservar() {
     document.getElementById('modalObservar').style.display = 'none';
 }
 
-// ASIGNACIÓN DE RECURSOS
+
 function abrirAsignacion(id) {
     const t = tareas.find(x => x.id === id);
     document.getElementById('idTareaActual').value = t.id; document.getElementById('tituloAsignacion').innerText = 'Asignar Recursos a: ' + t.nombre;
@@ -163,7 +155,6 @@ function renderizarRecursos(t) {
     document.getElementById('listaOtroCostoTarea').innerHTML = t.otrosCostos.map(o => { const c = otrosCostos.find(x => x.id === o.id); return c ? `<li>${c.concepto} - Cant: ${o.cantidad}</li>` : ''; }).join('');
 }
 
-// DASHBOARD
 function actualizarDashboard() {
     let estPers = 0, estMat = 0, estOtr = 0;
     let realPers = 0, realMat = 0, realOtr = 0;

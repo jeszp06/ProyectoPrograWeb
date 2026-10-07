@@ -4,15 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Control de Proyectos</title>
-    <!-- Fuente Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Boxicons (Íconos profesionales) -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Navegación -->
+
     <nav>
         <div class="logo">
             <h2><i class='bx bx-bar-chart-alt-2'></i> Control de Proyecto</h2>
@@ -26,14 +24,12 @@
         </ul>
     </nav>
 
-    <!-- Contenedor Principal -->
+
     <main>
         
-        <!-- Dashboard -->
         <section id="dashboard" class="seccion activa">
             <h1 class="titulo-seccion">Dashboard del Proyecto</h1>
             
-            <!-- Barra de Avance -->
             <div class="card card-avance">
                 <h3>Avance General del Proyecto</h3>
                 <div class="barra-fondo">
@@ -41,10 +37,9 @@
                 </div>
             </div>
 
-            <!-- Alertas de Personal -->
             <div id="contenedorAlertas" class="alertas-contenedor"></div>
 
-            <!-- Tarjetas de Costos -->
+
             <div class="dashboard-grid">
                 <div class="stat-card stat-total">
                     <div class="stat-icon"><i class='bx bx-wallet'></i></div>
@@ -81,7 +76,7 @@
             </div>
         </section>
 
-        <!-- Personal -->
+
         <section id="personal" class="seccion">
             <h1 class="titulo-seccion">Gestión de Personal</h1>
             <div class="card form-card">
@@ -103,12 +98,12 @@
             </div>
         </section>
 
-        <!-- Materiales y Otros Costos -->
+
         <section id="materiales" class="seccion">
             <h1 class="titulo-seccion">Materiales y Otros Costos</h1>
             
             <div class="grid-2-cols">
-                <!-- Columna Materiales -->
+
                 <div>
                     <div class="card form-card">
                         <h3><i class='bx bx-layer-plus'></i> Agregar Material</h3>
@@ -128,7 +123,6 @@
                     </div>
                 </div>
 
-                <!-- Columna Otros Costos -->
                 <div>
                     <div class="card form-card">
                         <h3><i class='bx bx-message-square-add'></i> Agregar Otro Gasto</h3>
@@ -150,7 +144,6 @@
             </div>
         </section>
 
-        <!-- Tareas -->
         <section id="tareas" class="seccion">
             <h1 class="titulo-seccion">Gestión de Tareas</h1>
             <div class="card form-card">
@@ -179,7 +172,6 @@
                 </div>
             </div>
 
-            <!-- Panel de Asignación -->
             <div class="card panel-asignacion" id="panelAsignacion" style="display: none;">
                 <div class="header-asignacion">
                     <h3 id="tituloAsignacion">Asignar Recursos</h3>
@@ -219,7 +211,6 @@
             </div>
         </section>
 
-        <!-- Modal para Observar Tarea (Agregado al final del main) -->
         <div id="modalObservar" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
@@ -227,7 +218,6 @@
                     <button class="btn-cerrar-modal" onclick="cerrarModalObservar()"><i class='bx bx-x'></i></button>
                 </div>
                 <div id="modalContenidoTarea" class="modal-body">
-                    <!-- El contenido y los costos se inyectarán aquí con JavaScript -->
                 </div>
             </div>
         </div>
