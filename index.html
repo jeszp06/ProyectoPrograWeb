@@ -10,7 +10,6 @@
 </head>
 <body>
 
-    <!-- PANTALLA DE LOGIN -->
     <div id="pantallaLogin" class="login-container">
         <div class="card login-card">
             <div class="login-logo"><i class='bx bx-lock-alt'></i></div>
@@ -22,7 +21,7 @@
                 </div>
                 <div class="input-group-login">
                     <i class='bx bx-key'></i>
-                    <input type="password" id="passwordLogin" placeholder="Contraseña (ej: 1234)" required>
+                    <input type="password" id="passwordLogin" placeholder="Contraseña secreta" required>
                 </div>
                 <button type="submit" class="btn-agregar" style="width: 100%; justify-content: center;">Entrar al Sistema</button>
             </form>
@@ -30,7 +29,6 @@
         </div>
     </div>
 
-    <!-- CONTENEDOR PRINCIPAL DE LA APP -->
     <div id="appPrincipal" style="display: none;">
         
         <nav>
@@ -42,6 +40,9 @@
                 <li><button onclick="mostrarSeccion('personal')"><i class='bx bxs-user-detail'></i> Personal</button></li>
                 <li><button onclick="mostrarSeccion('materiales')"><i class='bx bxs-box'></i> Materiales / Gastos</button></li>
                 <li><button onclick="mostrarSeccion('tareas')"><i class='bx bx-task'></i> Tareas</button></li>
+                
+                <li><button onclick="mostrarSeccion('usuarios')"><i class='bx bxs-group'></i> Usuarios</button></li>
+                
                 <li><button onclick="limpiarDatos()" class="btn-limpiar-nav"><i class='bx bx-trash'></i> Limpiar Datos</button></li>
                 <li><button onclick="cerrarSesion()" class="btn-cerrar-sesion"><i class='bx bx-log-out'></i> Salir</button></li>
             </ul>
@@ -222,6 +223,42 @@
                             </form>
                             <ul id="listaOtroCostoTarea" class="lista-recursos"></ul>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="usuarios" class="seccion">
+                <h1 class="titulo-seccion">Usuarios del Sistema</h1>
+                
+                <div class="card form-card">
+                    <h3><i class='bx bx-user-plus'></i> Registrar Nuevo Usuario</h3>
+                    <form id="formUsuarios" onsubmit="agregarUsuarioSistema(event)">
+                        <div class="input-group">
+                            <label>Usuario:</label>
+                            <input type="text" id="nuevoUsuarioNombre" placeholder="Ej: pedro123" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Clave:</label>
+                            <input type="password" id="nuevoUsuarioClave" placeholder="Contraseña secreta" required>
+                        </div>
+                        <button type="submit" class="btn-agregar"><i class='bx bx-save'></i> Registrar</button>
+                    </form>
+                </div>
+                
+                <div class="card tabla-card">
+                    <h3>Lista de Usuarios Autorizados</h3>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Usuario de Acceso</th>
+                                    <th>Rol</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bodyUsuarios">
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </section>

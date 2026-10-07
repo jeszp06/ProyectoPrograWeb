@@ -2,14 +2,15 @@ let personal = [];
 let materiales = [];
 let otrosCostos = [];
 let tareas = [];
+let usuariosSistema = [{ id: 'admin_root', usuario: 'admin', clave: '1234', rol: 'Administrador' }];
 
-// SISTEMA DElLOGIN
 function verificarSesion() {
     if(localStorage.getItem('sesionActiva') === 'true') {
         document.getElementById('pantallaLogin').style.display = 'none';
         document.getElementById('appPrincipal').style.display = 'block';
         cargarDatos();
         renderizarPersonal(); renderizarMateriales(); renderizarOtrosCostos(); renderizarTareas();
+        renderizarUsuarios();
     } else {
         document.getElementById('pantallaLogin').style.display = 'flex';
         document.getElementById('appPrincipal').style.display = 'none';
@@ -18,12 +19,15 @@ function verificarSesion() {
 
 function iniciarSesion(e) {
     e.preventDefault();
-    const usuario = document.getElementById('usuarioLogin').value;
-    const pass = document.getElementById('passwordLogin').value;
+    const usuarioInput = document.getElementById('usuarioLogin').value;
+    const passInput = document.getElementById('passwordLogin').value;
 
-    // Validación en FrontEnd
-    if (usuario === 'admin' && pass === '1234') {
+    const usuarioEncontrado = usuariosSistema.find(u => u.usuario === usuarioInput && u.clave === passInput);
+
+    if (usuarioEncontrado) {
         localStorage.setItem('sesionActiva', 'true');
+        localStorage.setItem('usuarioActual', usuarioEncontrado.usuario);
+        
         document.getElementById('errorLogin').style.display = 'none';
         verificarSesion();
     } else {
@@ -33,13 +37,14 @@ function iniciarSesion(e) {
 
 function cerrarSesion() {
     localStorage.removeItem('sesionActiva');
+    localStorage.removeItem('usuarioActual');
     document.getElementById('usuarioLogin').value = '';
     document.getElementById('passwordLogin').value = '';
     verificarSesion();
 }
 
-// SISTEMA PRINCIPAL CRUD Y LÓGICA
 function cargarDatos() {
+    if (localStorage.getItem('usuariosSistema')) usuariosSistema = JSON.parse(localStorage.getItem('usuariosSistema'));
     if (localStorage.getItem('personal')) personal = JSON.parse(localStorage.getItem('personal'));
     if (localStorage.getItem('materiales')) materiales = JSON.parse(localStorage.getItem('materiales'));
     if (localStorage.getItem('otrosCostos')) otrosCostos = JSON.parse(localStorage.getItem('otrosCostos'));
@@ -48,6 +53,7 @@ function cargarDatos() {
 }
 
 function guardarDatos() {
+    localStorage.setItem('usuariosSistema', JSON.stringify(usuariosSistema));
     localStorage.setItem('personal', JSON.stringify(personal));
     localStorage.setItem('materiales', JSON.stringify(materiales));
     localStorage.setItem('otrosCostos', JSON.stringify(otrosCostos));
@@ -58,9 +64,13 @@ function guardarDatos() {
 function limpiarDatos() {
     if(confirm("¿Estás seguro de que deseas borrar TODOS los datos? Esta acción eliminará registros permanentemente.")) {
         personal = []; materiales = []; otrosCostos = []; tareas = [];
+        usuariosSistema = [{ id: 'admin_root', usuario: 'admin', clave: '1234', rol: 'Administrador' }];
+        
         localStorage.removeItem('personal'); localStorage.removeItem('materiales'); 
         localStorage.removeItem('otrosCostos'); localStorage.removeItem('tareas');
-        renderizarPersonal(); renderizarMateriales(); renderizarOtrosCostos(); renderizarTareas();
+        localStorage.setItem('usuariosSistema', JSON.stringify(usuariosSistema));
+        
+        renderizarPersonal(); renderizarMateriales(); renderizarOtrosCostos(); renderizarTareas(); renderizarUsuarios();
         actualizarDashboard(); cerrarAsignacion();
         alert("Todos los datos han sido eliminados correctamente.");
     }
@@ -71,6 +81,54 @@ function mostrarSeccion(idSeccion) {
     document.getElementById(idSeccion).classList.add('activa');
     if(idSeccion !== 'tareas') cerrarAsignacion();
     if(idSeccion === 'dashboard') actualizarDashboard(); 
+}
+
+function agregarUsuarioSistema(e) {
+    e.preventDefault();
+    const nombreUsu = document.getElementById('nuevoUsuarioNombre').value.trim();
+    const claveUsu = document.getElementById('nuevoUsuarioClave').value;
+    
+    if(usuariosSistema.some(u => u.usuario.toLowerCase() === nombreUsu.toLowerCase())) {
+        return alert("Error: Ese nombre de usuario ya está registrado.");
+    }
+    
+    usuariosSistema.push({ 
+        id: Date.now(), 
+        usuario: nombreUsu, 
+        clave: claveUsu, 
+        rol: 'Asistente' 
+    });
+    
+    guardarDatos();
+    document.getElementById('formUsuarios').reset();
+    renderizarUsuarios();
+}
+
+function eliminarUsuarioSistema(id) {
+    if(id === 'admin_root') return alert("Error de seguridad: No puedes eliminar al Administrador principal.");
+    
+    if(confirm("¿Seguro que deseas revocar el acceso a este usuario?")) {
+        usuariosSistema = usuariosSistema.filter(u => u.id !== id);
+        guardarDatos();
+        renderizarUsuarios();
+    }
+}
+
+function renderizarUsuarios() {
+    const tbody = document.getElementById('bodyUsuarios');
+    if(!tbody) return; 
+    
+    tbody.innerHTML = usuariosSistema.map(u => `
+        <tr>
+            <td><strong>@${u.usuario}</strong></td>
+            <td><span class="${u.rol === 'Administrador' ? 'estado-concluida' : 'estado-pendiente'}">${u.rol}</span></td>
+            <td>
+                ${u.id !== 'admin_root' ? 
+                `<button class="btn-eliminar" onclick="eliminarUsuarioSistema(${u.id})"><i class='bx bx-trash'></i> Eliminar</button>` 
+                : '<i style="color:#64748b; font-size: 0.85em;">(Cuenta protegida)</i>'}
+            </td>
+        </tr>
+    `).join('');
 }
 
 function agregarPersonal(e) { e.preventDefault(); personal.push({ id: Date.now(), nombre: document.getElementById('nombrePersonal').value, costoHora: parseFloat(document.getElementById('costoHoraPersonal').value) }); guardarDatos(); document.getElementById('formPersonal').reset(); renderizarPersonal(); }
