@@ -10,218 +10,234 @@
 </head>
 <body>
 
-
-    <nav>
-        <div class="logo">
-            <h2><i class='bx bx-bar-chart-alt-2'></i> Control de Proyecto</h2>
+    <!-- PANTALLA DE LOGIN -->
+    <div id="pantallaLogin" class="login-container">
+        <div class="card login-card">
+            <div class="login-logo"><i class='bx bx-lock-alt'></i></div>
+            <h2>Iniciar Sesión</h2>
+            <form onsubmit="iniciarSesion(event)">
+                <div class="input-group-login">
+                    <i class='bx bx-user'></i>
+                    <input type="text" id="usuarioLogin" placeholder="Usuario (ej: admin)" required>
+                </div>
+                <div class="input-group-login">
+                    <i class='bx bx-key'></i>
+                    <input type="password" id="passwordLogin" placeholder="Contraseña (ej: 1234)" required>
+                </div>
+                <button type="submit" class="btn-agregar" style="width: 100%; justify-content: center;">Entrar al Sistema</button>
+            </form>
+            <p id="errorLogin" class="mensaje-error" style="display: none;"><i class='bx bx-error'></i> Credenciales incorrectas</p>
         </div>
-        <ul>
-            <li><button onclick="mostrarSeccion('dashboard')"><i class='bx bxs-dashboard'></i> Dashboard</button></li>
-            <li><button onclick="mostrarSeccion('personal')"><i class='bx bxs-user-detail'></i> Personal</button></li>
-            <li><button onclick="mostrarSeccion('materiales')"><i class='bx bxs-box'></i> Materiales / Gastos</button></li>
-            <li><button onclick="mostrarSeccion('tareas')"><i class='bx bx-task'></i> Tareas</button></li>
-            <li><button onclick="limpiarDatos()" class="btn-limpiar-nav"><i class='bx bx-trash'></i> Limpiar Datos</button></li>
-        </ul>
-    </nav>
+    </div>
 
-
-    <main>
+    <!-- CONTENEDOR PRINCIPAL DE LA APP -->
+    <div id="appPrincipal" style="display: none;">
         
-        <section id="dashboard" class="seccion activa">
-            <h1 class="titulo-seccion">Dashboard del Proyecto</h1>
-            
-            <div class="card card-avance">
-                <h3>Avance General del Proyecto</h3>
-                <div class="barra-fondo">
-                    <div id="barraProgreso" class="barra-relleno">0%</div>
-                </div>
+        <nav>
+            <div class="logo">
+                <h2><i class='bx bx-bar-chart-alt-2'></i> Control de Proyecto</h2>
             </div>
+            <ul>
+                <li><button onclick="mostrarSeccion('dashboard')"><i class='bx bxs-dashboard'></i> Dashboard</button></li>
+                <li><button onclick="mostrarSeccion('personal')"><i class='bx bxs-user-detail'></i> Personal</button></li>
+                <li><button onclick="mostrarSeccion('materiales')"><i class='bx bxs-box'></i> Materiales / Gastos</button></li>
+                <li><button onclick="mostrarSeccion('tareas')"><i class='bx bx-task'></i> Tareas</button></li>
+                <li><button onclick="limpiarDatos()" class="btn-limpiar-nav"><i class='bx bx-trash'></i> Limpiar Datos</button></li>
+                <li><button onclick="cerrarSesion()" class="btn-cerrar-sesion"><i class='bx bx-log-out'></i> Salir</button></li>
+            </ul>
+        </nav>
 
-            <div id="contenedorAlertas" class="alertas-contenedor"></div>
-
-
-            <div class="dashboard-grid">
-                <div class="stat-card stat-total">
-                    <div class="stat-icon"><i class='bx bx-wallet'></i></div>
-                    <div class="stat-info">
-                        <h3>Costo Total</h3>
-                        <p><strong>Estimado:</strong> $<span id="dashTotalEst">0.00</span></p>
-                        <p><strong>Real:</strong> $<span id="dashTotalReal">0.00</span></p>
-                    </div>
-                </div>
-                <div class="stat-card stat-personal">
-                    <div class="stat-icon"><i class='bx bx-user-circle'></i></div>
-                    <div class="stat-info">
-                        <h3>Personal</h3>
-                        <p><strong>Estimado:</strong> $<span id="dashPersEst">0.00</span></p>
-                        <p><strong>Real:</strong> $<span id="dashPersReal">0.00</span></p>
-                    </div>
-                </div>
-                <div class="stat-card stat-materiales">
-                    <div class="stat-icon"><i class='bx bx-cube-alt'></i></div>
-                    <div class="stat-info">
-                        <h3>Materiales</h3>
-                        <p><strong>Estimado:</strong> $<span id="dashMatEst">0.00</span></p>
-                        <p><strong>Real:</strong> $<span id="dashMatReal">0.00</span></p>
-                    </div>
-                </div>
-                <div class="stat-card stat-otros">
-                    <div class="stat-icon"><i class='bx bx-receipt'></i></div>
-                    <div class="stat-info">
-                        <h3>Otros Gastos</h3>
-                        <p><strong>Estimado:</strong> $<span id="dashOtrosEst">0.00</span></p>
-                        <p><strong>Real:</strong> $<span id="dashOtrosReal">0.00</span></p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-
-        <section id="personal" class="seccion">
-            <h1 class="titulo-seccion">Gestión de Personal</h1>
-            <div class="card form-card">
-                <h3><i class='bx bx-user-plus'></i> Agregar Nuevo Empleado</h3>
-                <form id="formPersonal" onsubmit="agregarPersonal(event)">
-                    <input type="text" id="nombrePersonal" placeholder="Nombre del empleado" required>
-                    <input type="number" id="costoHoraPersonal" placeholder="Costo por hora ($)" step="0.01" min="0" required>
-                    <button type="submit" class="btn-agregar"><i class='bx bx-save'></i> Guardar Empleado</button>
-                </form>
-            </div>
-            <div class="card tabla-card">
-                <h3>Lista de Personal</h3>
-                <div class="table-responsive">
-                    <table>
-                        <thead><tr><th>Nombre</th><th>Costo / Hora</th><th>Acciones</th></tr></thead>
-                        <tbody id="bodyPersonal"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-
-        <section id="materiales" class="seccion">
-            <h1 class="titulo-seccion">Materiales y Otros Costos</h1>
-            
-            <div class="grid-2-cols">
-
-                <div>
-                    <div class="card form-card">
-                        <h3><i class='bx bx-layer-plus'></i> Agregar Material</h3>
-                        <form onsubmit="agregarMaterial(event)">
-                            <input type="text" id="nombreMaterial" placeholder="Nombre del material" required>
-                            <input type="number" id="costoUnidadMaterial" placeholder="Costo por unidad ($)" step="0.01" min="0" required>
-                            <button type="submit" class="btn-agregar"><i class='bx bx-save'></i> Guardar Material</button>
-                        </form>
-                    </div>
-                    <div class="card tabla-card">
-                        <div class="table-responsive">
-                            <table>
-                                <thead><tr><th>Material</th><th>Costo / Und</th><th>Acciones</th></tr></thead>
-                                <tbody id="bodyMateriales"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="card form-card">
-                        <h3><i class='bx bx-message-square-add'></i> Agregar Otro Gasto</h3>
-                        <form onsubmit="agregarOtroCosto(event)">
-                            <input type="text" id="conceptoOtroCosto" placeholder="Concepto del gasto" required>
-                            <input type="number" id="costoUnidadOtroCosto" placeholder="Costo total ($)" step="0.01" min="0" required>
-                            <button type="submit" class="btn-agregar"><i class='bx bx-save'></i> Guardar Gasto</button>
-                        </form>
-                    </div>
-                    <div class="card tabla-card">
-                        <div class="table-responsive">
-                            <table>
-                                <thead><tr><th>Concepto</th><th>Costo</th><th>Acciones</th></tr></thead>
-                                <tbody id="bodyOtrosCostos"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="tareas" class="seccion">
-            <h1 class="titulo-seccion">Gestión de Tareas</h1>
-            <div class="card form-card">
-                <h3><i class='bx bx-list-plus'></i> Crear Nueva Tarea</h3>
-                <form onsubmit="agregarTarea(event)">
-                    <input type="text" id="nombreTarea" placeholder="Nombre de la tarea" required>
-                    <div class="input-group">
-                        <label>Inicio:</label>
-                        <input type="date" id="fechaInicioTarea" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Fin:</label>
-                        <input type="date" id="fechaFinTarea" required>
-                    </div>
-                    <button type="submit" class="btn-agregar"><i class='bx bx-plus'></i> Crear Tarea</button>
-                </form>
-            </div>
-            
-            <div class="card tabla-card">
-                <h3>Lista de Tareas</h3>
-                <div class="table-responsive">
-                    <table>
-                        <thead><tr><th>Tarea</th><th>Fechas</th><th>Estado</th><th>Acciones</th></tr></thead>
-                        <tbody id="bodyTareas"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="card panel-asignacion" id="panelAsignacion" style="display: none;">
-                <div class="header-asignacion">
-                    <h3 id="tituloAsignacion">Asignar Recursos</h3>
-                    <button class="btn-cerrar" onclick="cerrarAsignacion()"><i class='bx bx-x'></i> Cerrar</button>
-                </div>
-                <input type="hidden" id="idTareaActual">
+        <main>
+            <section id="dashboard" class="seccion activa">
+                <h1 class="titulo-seccion">Dashboard del Proyecto</h1>
                 
-                <div class="grid-asignacion">
-                    <div class="col-asignacion">
-                        <h4><i class='bx bx-user'></i> Personal</h4>
-                        <form onsubmit="asignarPersonalTarea(event)">
-                            <select id="selectPersonal" required></select>
-                            <input type="number" id="horasPersonal" placeholder="Horas totales" min="1" step="0.5" required>
-                            <button type="submit" class="btn-asignar">Asignar</button>
-                        </form>
-                        <ul id="listaPersonalTarea" class="lista-recursos"></ul>
-                    </div>
-                    <div class="col-asignacion">
-                        <h4><i class='bx bx-cube'></i> Materiales</h4>
-                        <form onsubmit="asignarMaterialTarea(event)">
-                            <select id="selectMaterial" required></select>
-                            <input type="number" id="cantidadMaterial" placeholder="Cantidad" min="1" step="0.01" required>
-                            <button type="submit" class="btn-asignar">Asignar</button>
-                        </form>
-                        <ul id="listaMaterialTarea" class="lista-recursos"></ul>
-                    </div>
-                    <div class="col-asignacion">
-                        <h4><i class='bx bx-receipt'></i> Otros Costos</h4>
-                        <form onsubmit="asignarOtroCostoTarea(event)">
-                            <select id="selectOtroCosto" required></select>
-                            <input type="number" id="cantidadOtroCosto" placeholder="Cantidad" min="1" step="0.01" required>
-                            <button type="submit" class="btn-asignar">Asignar</button>
-                        </form>
-                        <ul id="listaOtroCostoTarea" class="lista-recursos"></ul>
+                <div class="card card-avance">
+                    <h3>Avance General del Proyecto</h3>
+                    <div class="barra-fondo">
+                        <div id="barraProgreso" class="barra-relleno">0%</div>
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <div id="modalObservar" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 id="modalTituloTarea"><i class='bx bx-search-alt-2'></i> Detalles de la Tarea</h3>
-                    <button class="btn-cerrar-modal" onclick="cerrarModalObservar()"><i class='bx bx-x'></i></button>
+                <div id="contenedorAlertas" class="alertas-contenedor"></div>
+
+                <div class="dashboard-grid">
+                    <div class="stat-card stat-total">
+                        <div class="stat-icon"><i class='bx bx-wallet'></i></div>
+                        <div class="stat-info">
+                            <h3>Costo Total</h3>
+                            <p><strong>Estimado:</strong> $<span id="dashTotalEst">0.00</span></p>
+                            <p><strong>Real:</strong> $<span id="dashTotalReal">0.00</span></p>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-personal">
+                        <div class="stat-icon"><i class='bx bx-user-circle'></i></div>
+                        <div class="stat-info">
+                            <h3>Personal</h3>
+                            <p><strong>Estimado:</strong> $<span id="dashPersEst">0.00</span></p>
+                            <p><strong>Real:</strong> $<span id="dashPersReal">0.00</span></p>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-materiales">
+                        <div class="stat-icon"><i class='bx bx-cube-alt'></i></div>
+                        <div class="stat-info">
+                            <h3>Materiales</h3>
+                            <p><strong>Estimado:</strong> $<span id="dashMatEst">0.00</span></p>
+                            <p><strong>Real:</strong> $<span id="dashMatReal">0.00</span></p>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-otros">
+                        <div class="stat-icon"><i class='bx bx-receipt'></i></div>
+                        <div class="stat-info">
+                            <h3>Otros Gastos</h3>
+                            <p><strong>Estimado:</strong> $<span id="dashOtrosEst">0.00</span></p>
+                            <p><strong>Real:</strong> $<span id="dashOtrosReal">0.00</span></p>
+                        </div>
+                    </div>
                 </div>
-                <div id="modalContenidoTarea" class="modal-body">
+            </section>
+
+            <section id="personal" class="seccion">
+                <h1 class="titulo-seccion">Gestión de Personal</h1>
+                <div class="card form-card">
+                    <h3><i class='bx bx-user-plus'></i> Agregar Nuevo Empleado</h3>
+                    <form id="formPersonal" onsubmit="agregarPersonal(event)">
+                        <input type="text" id="nombrePersonal" placeholder="Nombre del empleado" required>
+                        <input type="number" id="costoHoraPersonal" placeholder="Costo por hora ($)" step="0.01" min="0" required>
+                        <button type="submit" class="btn-agregar"><i class='bx bx-save'></i> Guardar Empleado</button>
+                    </form>
+                </div>
+                <div class="card tabla-card">
+                    <h3>Lista de Personal</h3>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Nombre</th><th>Costo / Hora</th><th>Acciones</th></tr></thead>
+                            <tbody id="bodyPersonal"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="materiales" class="seccion">
+                <h1 class="titulo-seccion">Materiales y Otros Costos</h1>
+                <div class="grid-2-cols">
+                    <div>
+                        <div class="card form-card">
+                            <h3><i class='bx bx-layer-plus'></i> Agregar Material</h3>
+                            <form onsubmit="agregarMaterial(event)">
+                                <input type="text" id="nombreMaterial" placeholder="Nombre del material" required>
+                                <input type="number" id="costoUnidadMaterial" placeholder="Costo por unidad ($)" step="0.01" min="0" required>
+                                <button type="submit" class="btn-agregar"><i class='bx bx-save'></i> Guardar Material</button>
+                            </form>
+                        </div>
+                        <div class="card tabla-card">
+                            <div class="table-responsive">
+                                <table>
+                                    <thead><tr><th>Material</th><th>Costo / Und</th><th>Acciones</th></tr></thead>
+                                    <tbody id="bodyMateriales"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="card form-card">
+                            <h3><i class='bx bx-message-square-add'></i> Agregar Otro Gasto</h3>
+                            <form onsubmit="agregarOtroCosto(event)">
+                                <input type="text" id="conceptoOtroCosto" placeholder="Concepto del gasto" required>
+                                <input type="number" id="costoUnidadOtroCosto" placeholder="Costo total ($)" step="0.01" min="0" required>
+                                <button type="submit" class="btn-agregar"><i class='bx bx-save'></i> Guardar Gasto</button>
+                            </form>
+                        </div>
+                        <div class="card tabla-card">
+                            <div class="table-responsive">
+                                <table>
+                                    <thead><tr><th>Concepto</th><th>Costo</th><th>Acciones</th></tr></thead>
+                                    <tbody id="bodyOtrosCostos"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tareas" class="seccion">
+                <h1 class="titulo-seccion">Gestión de Tareas</h1>
+                <div class="card form-card">
+                    <h3><i class='bx bx-list-plus'></i> Crear Nueva Tarea</h3>
+                    <form onsubmit="agregarTarea(event)">
+                        <input type="text" id="nombreTarea" placeholder="Nombre de la tarea" required>
+                        <div class="input-group">
+                            <label>Inicio:</label>
+                            <input type="date" id="fechaInicioTarea" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Fin:</label>
+                            <input type="date" id="fechaFinTarea" required>
+                        </div>
+                        <button type="submit" class="btn-agregar"><i class='bx bx-plus'></i> Crear Tarea</button>
+                    </form>
+                </div>
+                
+                <div class="card tabla-card">
+                    <h3>Lista de Tareas</h3>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Tarea</th><th>Fechas</th><th>Estado</th><th>Acciones</th></tr></thead>
+                            <tbody id="bodyTareas"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card panel-asignacion" id="panelAsignacion" style="display: none;">
+                    <div class="header-asignacion">
+                        <h3 id="tituloAsignacion">Asignar Recursos</h3>
+                        <button class="btn-cerrar" onclick="cerrarAsignacion()"><i class='bx bx-x'></i> Cerrar</button>
+                    </div>
+                    <input type="hidden" id="idTareaActual">
+                    
+                    <div class="grid-asignacion">
+                        <div class="col-asignacion">
+                            <h4><i class='bx bx-user'></i> Personal</h4>
+                            <form onsubmit="asignarPersonalTarea(event)">
+                                <select id="selectPersonal" required></select>
+                                <input type="number" id="horasPersonal" placeholder="Horas totales" min="1" step="0.5" required>
+                                <button type="submit" class="btn-asignar">Asignar</button>
+                            </form>
+                            <ul id="listaPersonalTarea" class="lista-recursos"></ul>
+                        </div>
+                        <div class="col-asignacion">
+                            <h4><i class='bx bx-cube'></i> Materiales</h4>
+                            <form onsubmit="asignarMaterialTarea(event)">
+                                <select id="selectMaterial" required></select>
+                                <input type="number" id="cantidadMaterial" placeholder="Cantidad" min="1" step="0.01" required>
+                                <button type="submit" class="btn-asignar">Asignar</button>
+                            </form>
+                            <ul id="listaMaterialTarea" class="lista-recursos"></ul>
+                        </div>
+                        <div class="col-asignacion">
+                            <h4><i class='bx bx-receipt'></i> Otros Costos</h4>
+                            <form onsubmit="asignarOtroCostoTarea(event)">
+                                <select id="selectOtroCosto" required></select>
+                                <input type="number" id="cantidadOtroCosto" placeholder="Cantidad" min="1" step="0.01" required>
+                                <button type="submit" class="btn-asignar">Asignar</button>
+                            </form>
+                            <ul id="listaOtroCostoTarea" class="lista-recursos"></ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div id="modalObservar" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="modalTituloTarea"><i class='bx bx-search-alt-2'></i> Detalles de la Tarea</h3>
+                        <button class="btn-cerrar-modal" onclick="cerrarModalObservar()"><i class='bx bx-x'></i></button>
+                    </div>
+                    <div id="modalContenidoTarea" class="modal-body">
+                    </div>
                 </div>
             </div>
-        </div>
-    </main>
+        </main>
+    </div>
 
     <script src="app.js"></script>
 </body>

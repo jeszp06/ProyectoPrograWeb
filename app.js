@@ -3,6 +3,42 @@ let materiales = [];
 let otrosCostos = [];
 let tareas = [];
 
+// SISTEMA DElLOGIN
+function verificarSesion() {
+    if(localStorage.getItem('sesionActiva') === 'true') {
+        document.getElementById('pantallaLogin').style.display = 'none';
+        document.getElementById('appPrincipal').style.display = 'block';
+        cargarDatos();
+        renderizarPersonal(); renderizarMateriales(); renderizarOtrosCostos(); renderizarTareas();
+    } else {
+        document.getElementById('pantallaLogin').style.display = 'flex';
+        document.getElementById('appPrincipal').style.display = 'none';
+    }
+}
+
+function iniciarSesion(e) {
+    e.preventDefault();
+    const usuario = document.getElementById('usuarioLogin').value;
+    const pass = document.getElementById('passwordLogin').value;
+
+    // Validación en FrontEnd
+    if (usuario === 'admin' && pass === '1234') {
+        localStorage.setItem('sesionActiva', 'true');
+        document.getElementById('errorLogin').style.display = 'none';
+        verificarSesion();
+    } else {
+        document.getElementById('errorLogin').style.display = 'flex';
+    }
+}
+
+function cerrarSesion() {
+    localStorage.removeItem('sesionActiva');
+    document.getElementById('usuarioLogin').value = '';
+    document.getElementById('passwordLogin').value = '';
+    verificarSesion();
+}
+
+// SISTEMA PRINCIPAL CRUD Y LÓGICA
 function cargarDatos() {
     if (localStorage.getItem('personal')) personal = JSON.parse(localStorage.getItem('personal'));
     if (localStorage.getItem('materiales')) materiales = JSON.parse(localStorage.getItem('materiales'));
@@ -22,7 +58,8 @@ function guardarDatos() {
 function limpiarDatos() {
     if(confirm("¿Estás seguro de que deseas borrar TODOS los datos? Esta acción eliminará registros permanentemente.")) {
         personal = []; materiales = []; otrosCostos = []; tareas = [];
-        localStorage.clear();
+        localStorage.removeItem('personal'); localStorage.removeItem('materiales'); 
+        localStorage.removeItem('otrosCostos'); localStorage.removeItem('tareas');
         renderizarPersonal(); renderizarMateriales(); renderizarOtrosCostos(); renderizarTareas();
         actualizarDashboard(); cerrarAsignacion();
         alert("Todos los datos han sido eliminados correctamente.");
@@ -126,7 +163,6 @@ function observarTarea(id) {
     let granTotal = costoTotalPers + costoTotalMat + costoTotalOtr;
     htmlDetalles += `<div class="detalle-total"><h3>Costo Total Invertido: $${granTotal.toFixed(2)}</h3></div>`;
 
-
     document.getElementById('modalContenidoTarea').innerHTML = htmlDetalles;
     document.getElementById('modalObservar').style.display = 'flex';
 }
@@ -134,7 +170,6 @@ function observarTarea(id) {
 function cerrarModalObservar() {
     document.getElementById('modalObservar').style.display = 'none';
 }
-
 
 function abrirAsignacion(id) {
     const t = tareas.find(x => x.id === id);
@@ -212,5 +247,4 @@ function actualizarDashboard() {
     }
 }
 
-cargarDatos();
-renderizarPersonal(); renderizarMateriales(); renderizarOtrosCostos(); renderizarTareas();
+verificarSesion();

@@ -195,3 +195,70 @@ tr:hover td { background-color: #f8fafc; }
 
 .btn-observar { background-color: #f1f5f9; color: #475569; border-color: #cbd5e1; }
 .btn-observar:hover { background-color: #e2e8f0; border-color: #94a3b8; color: var(--secondary); }
+/* PANTALLA DE LOGIN */
+.login-container { 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    height: 100vh; 
+    background-color: var(--secondary); 
+}
+.login-card { 
+    width: 100%; 
+    max-width: 380px; 
+    text-align: center; 
+    padding: 40px 30px; 
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); 
+    border: none; 
+}
+.login-logo { 
+    font-size: 3.5rem; 
+    color: var(--primary); 
+    margin-bottom: 10px; 
+}
+.login-card h2 { 
+    margin-top: 0; 
+    color: var(--secondary); 
+    margin-bottom: 25px; 
+    font-weight: 700; 
+}
+.login-card form { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
+}
+.input-group-login { 
+    position: relative; 
+    display: flex; 
+    align-items: center; 
+    width: 100%; 
+}
+.input-group-login i { 
+    position: absolute; 
+    left: 15px; 
+    color: var(--text-light); 
+    font-size: 1.2rem; 
+}
+.input-group-login input { 
+    width: 100%; 
+    padding-left: 45px; 
+    box-sizing: border-box; 
+}
+.mensaje-error { 
+    color: var(--danger); 
+    background-color: #fef2f2; 
+    padding: 10px; 
+    border-radius: 6px; 
+    margin-top: 15px; 
+    font-size: 0.9em; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 5px; 
+    border: 1px solid #fecaca; 
+}
+.btn-cerrar-sesion { color: #cbd5e1; }
+.btn-cerrar-sesion:hover { 
+    color: white !important; 
+    background-color: rgba(255,255,255,0.1) !important; 
+}
